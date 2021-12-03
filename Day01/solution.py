@@ -1,4 +1,3 @@
-
 def parse_input(filename):
     data = []
 
