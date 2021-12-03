@@ -29,7 +29,9 @@ public class Solution {
     public static void main(String args[]) {
         try {
             List<String> bits = Solution.parseInput("Day03/input.txt");
-            Diagnostics diagnostics = new Diagnostics(bits);
+            int bitLength = bits.get(0).length();
+
+            Diagnostics diagnostics = new Diagnostics(bits, bitLength);
             int powerConsumption = diagnostics.runDiagnostics();
 
             System.out.println(powerConsumption);

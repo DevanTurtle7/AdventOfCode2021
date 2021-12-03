@@ -5,9 +5,11 @@ import java.util.List;
 
 public class Diagnostics {
     private List<String> bits;
+    private int bitLength;
 
-    public Diagnostics(List<String> bits) {
+    public Diagnostics(List<String> bits, int bitLength) {
         this.bits = bits;
+        this.bitLength = bitLength;
     }
 
     public int runDiagnostics() {
@@ -16,7 +18,7 @@ public class Diagnostics {
         HashMap<Integer, Integer> onesInPos = new HashMap<>();
 
         for (String bit : this.bits) {
-            for (int i = 0; i < bit.length(); i++) {
+            for (int i = 0; i < bitLength; i++) {
                 Character current = bit.charAt(i);
 
                 if (current == '0') {
@@ -45,12 +47,15 @@ public class Diagnostics {
         String gammaRate = "";
         String epsilonRate = "";
 
-        for (int i = 0; i < 5; i++) {
+        System.out.println(zerosInPos.values());
+        System.out.println(onesInPos.values());
+
+        for (int i = 0; i < bitLength; i++) {
             int numZeros = zerosInPos.get(i);
             int numOnes = onesInPos.get(i);
 
             gammaRate = gammaRate.concat(numZeros < numOnes ? "1" : "0");
-            epsilonRate = epsilonRate.concat(numZeros > numOnes ? "1" : "0");
+            epsilonRate = epsilonRate.concat(numZeros < numOnes ? "0" : "1");
         }
 
         int gammaValue = Integer.parseInt(gammaRate, 2);
