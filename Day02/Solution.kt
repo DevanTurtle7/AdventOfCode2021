@@ -73,4 +73,7 @@ fun main() {
     val result = finalPosition.finalPosition()
 
     println("Horiz: $horiz, Depth: $depth, Mult: ${result}")
+
+    val sub = parseDataPart2("./input.txt")
+    println("Horiz: ${sub.horiz}, Depth: ${sub.depth}, Mult: ${sub.finalPosition()}")
 }
