@@ -58,6 +58,7 @@ fun moveSub(instructions: List<Instruction>, sub: Sub): Int {
 
 fun main() {
     val instructions = parseData("./input.txt")
+
     val sub = Sub(0, 0)
     val result1 = moveSub(instructions, sub)
     println("Solution 1: $result1")
