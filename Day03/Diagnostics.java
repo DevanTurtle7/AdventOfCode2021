@@ -99,7 +99,15 @@ public class Diagnostics {
             index++;
         }
 
+        String scrubberRating = "";
+
+        for (int i = 0; i < oxygenGeneratorRating.length(); i++) {
+            char current = oxygenGeneratorRating.charAt(i);
+
+            scrubberRating = scrubberRating.concat(current == '0' ? "1" : "0");
+        }
         System.out.println(oxygenGeneratorRating);
+        System.out.println(scrubberRating);
 
     }
 }
