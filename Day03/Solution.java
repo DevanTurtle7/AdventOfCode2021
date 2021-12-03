@@ -30,11 +30,13 @@ public class Solution {
         try {
             List<String> bits = Solution.parseInput("Day03/input.txt");
             int bitLength = bits.get(0).length();
-
             Diagnostics diagnostics = new Diagnostics(bits, bitLength);
-            int powerConsumption = diagnostics.runDiagnostics();
 
+            int powerConsumption = diagnostics.runPowerDiagnostics();
             System.out.println(powerConsumption);
+
+            diagnostics.runLifeSupportDiagnostics();
+
         } catch(IOException e) {
             System.out.println(e);
         }

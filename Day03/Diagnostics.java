@@ -1,29 +1,31 @@
 package Day03;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Diagnostics {
-    private List<String> bits;
-    private int bitLength;
+    private List<String> bytes;
+    private int byteLength;
     private HashMap<Integer, Integer> mostCommonBits;
 
-    public Diagnostics(List<String> bits, int bitLength) {
-        this.bits = bits;
-        this.bitLength = bitLength;
+    public Diagnostics(List<String> bytes, int byteLength) {
+        this.bytes = bytes;
+        this.byteLength = byteLength;
         this.mostCommonBits = new HashMap<>();
 
         this.getMostCommonBits();
     }
 
-    public void getMostCommonBits() {
+    private void getMostCommonBits() {
         // Get counts of 0s and 1s in each pos
         HashMap<Integer, Integer> zerosInPos = new HashMap<>();
         HashMap<Integer, Integer> onesInPos = new HashMap<>();
 
-        for (String bit : this.bits) {
-            for (int i = 0; i < bitLength; i++) {
-                Character current = bit.charAt(i);
+        for (String currentByte : this.bytes) {
+            for (int i = 0; i < byteLength; i++) {
+                Character current = currentByte.charAt(i);
 
                 if (current == '0') {
                     int value = 1;
@@ -46,7 +48,7 @@ public class Diagnostics {
         }
 
         // Populate most common value
-        for (int i = 0; i < bitLength; i++) {
+        for (int i = 0; i < byteLength; i++) {
             int numZeros = zerosInPos.get(i);
             int numOnes = onesInPos.get(i);
 
@@ -55,12 +57,12 @@ public class Diagnostics {
         }
     }
 
-    public int runDiagnostics() {
+    public int runPowerDiagnostics() {
         // Get gamma and epsilon rates
         String gammaRate = "";
         String epsilonRate = "";
 
-        for (int i = 0; i < bitLength; i++) {
+        for (int i = 0; i < byteLength; i++) {
             Integer commonValue = mostCommonBits.get(i);
 
             gammaRate = gammaRate.concat(commonValue.toString());
@@ -72,5 +74,32 @@ public class Diagnostics {
         int powerConsumption = gammaValue * epsilonValue;
 
         return powerConsumption;
+    }
+
+    public void runLifeSupportDiagnostics() {
+        // Get oxygen rating
+        String oxygenGeneratorRating = "";
+        Set<String> remainingBytes = new HashSet<>(this.bytes);
+        Set<String> nextSet = new HashSet<>();
+        int index = 0;
+
+        while (remainingBytes.size() > 1) {
+            for (String currentByte : remainingBytes) {
+                int commonBit = mostCommonBits.get(index);
+                int currentBit = Character.getNumericValue(currentByte.charAt(index));
+
+                if (currentBit == commonBit) {
+                    nextSet.add(currentByte);
+                    oxygenGeneratorRating = currentByte;
+                }
+            }
+
+            remainingBytes = nextSet;
+            nextSet = new HashSet<>();
+            index++;
+        }
+
+        System.out.println(oxygenGeneratorRating);
+
     }
 }
