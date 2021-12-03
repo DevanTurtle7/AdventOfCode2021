@@ -33,10 +33,10 @@ public class Solution {
             Diagnostics diagnostics = new Diagnostics(bits, bitLength);
 
             int powerConsumption = diagnostics.runPowerDiagnostics();
-            System.out.println(powerConsumption);
+            System.out.println("Power consumption rating: " + powerConsumption);
 
             int lifeSupportRating = diagnostics.runLifeSupportDiagnostics();
-            System.out.println(lifeSupportRating);
+            System.out.println("Life support rating: " + lifeSupportRating);
 
         } catch(IOException e) {
             System.out.println(e);

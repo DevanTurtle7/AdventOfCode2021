@@ -1,5 +1,6 @@
 package Day03;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,22 +9,19 @@ import java.util.Set;
 public class Diagnostics {
     private List<String> bytes;
     private int byteLength;
-    private HashMap<Integer, Integer> mostCommonBits;
 
     public Diagnostics(List<String> bytes, int byteLength) {
         this.bytes = bytes;
         this.byteLength = byteLength;
-        this.mostCommonBits = new HashMap<>();
-
-        this.getMostCommonBits();
     }
 
-    private void getMostCommonBits() {
+    private HashMap<Integer, Integer> getMostCommonBits(Collection<String> bytes) {
         // Get counts of 0s and 1s in each pos
         HashMap<Integer, Integer> zerosInPos = new HashMap<>();
         HashMap<Integer, Integer> onesInPos = new HashMap<>();
+        HashMap<Integer, Integer> mostCommonBits = new HashMap<>();
 
-        for (String currentByte : this.bytes) {
+        for (String currentByte : bytes) {
             for (int i = 0; i < byteLength; i++) {
                 Character current = currentByte.charAt(i);
 
@@ -49,18 +47,21 @@ public class Diagnostics {
 
         // Populate most common value
         for (int i = 0; i < byteLength; i++) {
-            int numZeros = zerosInPos.get(i);
-            int numOnes = onesInPos.get(i);
+            int numZeros = zerosInPos.containsKey(i) ? zerosInPos.get(i) : 0;
+            int numOnes = onesInPos.containsKey(i) ? onesInPos.get(i) : 0;
 
             int commonValue = numZeros > numOnes ? 0 : 1;
             mostCommonBits.put(i, commonValue);
         }
+
+        return mostCommonBits;
     }
 
     public int runPowerDiagnostics() {
         // Get gamma and epsilon rates
         String gammaRate = "";
         String epsilonRate = "";
+        HashMap<Integer, Integer> mostCommonBits = getMostCommonBits(this.bytes);
 
         for (int i = 0; i < byteLength; i++) {
             Integer commonValue = mostCommonBits.get(i);
@@ -88,6 +89,8 @@ public class Diagnostics {
 
         while (remainingCommonBytes.size() > 1 && remainingUncommonBytes.size() > 1) {
             if (remainingCommonBytes.size() > 1) {
+                HashMap<Integer, Integer> mostCommonBits = getMostCommonBits(remainingCommonBytes);
+
                 for (String currentByte : remainingCommonBytes) {
                     int commonBit = mostCommonBits.get(index);
                     int currentBit = Character.getNumericValue(currentByte.charAt(index));
@@ -102,6 +105,8 @@ public class Diagnostics {
             }
 
             if (remainingUncommonBytes.size() > 1) {
+                HashMap<Integer, Integer> mostCommonBits = getMostCommonBits(remainingUncommonBytes);
+
                 for (String currentByte : remainingUncommonBytes) {
                     int commonBit = mostCommonBits.get(index);
                     int uncommonBit = commonBit == 0 ? 1 : 0;
@@ -118,9 +123,6 @@ public class Diagnostics {
 
             index++;
         }
-
-        System.out.println(oxygenGeneratorRating);
-        System.out.println(scrubberRating);
 
         int oxygenGeneratorValue = Integer.parseInt(oxygenGeneratorRating, 2);
         int scrubberValue = Integer.parseInt(scrubberRating, 2);
