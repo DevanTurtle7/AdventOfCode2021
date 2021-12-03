@@ -26,23 +26,21 @@ public class Diagnostics {
                 Character current = bit.charAt(i);
 
                 if (current == '0') {
+                    int value = 1;
+
                     if (zerosInPos.containsKey(i)) {
-                        int value = zerosInPos.get(i);
-                        value++;
-
-                        zerosInPos.put(i, value);
-                    } else {
-                        zerosInPos.put(i, 1);
+                        value = zerosInPos.get(i) + 1;
                     }
-                } else {
-                    if (onesInPos.containsKey(i)) {
-                        int value = onesInPos.get(i);
-                        value++;
 
-                        onesInPos.put(i, value);
-                    } else {
-                        onesInPos.put(i, 1);
+                    zerosInPos.put(i, value);
+                } else {
+                    int value = 1;
+
+                    if (onesInPos.containsKey(i)) {
+                        value = onesInPos.get(i) + 1;
                     } 
+
+                    onesInPos.put(i, value);
                 }
             }
         }
