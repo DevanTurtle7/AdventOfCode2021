@@ -26,20 +26,15 @@ public class Solution {
         return bits;
     }
 
-    public static void main(String args[]) {
-        try {
-            List<String> bits = Solution.parseInput("Day03/input.txt");
-            int bitLength = bits.get(0).length();
-            Diagnostics diagnostics = new Diagnostics(bits, bitLength);
+    public static void main(String args[]) throws IOException {
+        List<String> bits = Solution.parseInput("Day03/input.txt");
+        int bitLength = bits.get(0).length();
+        Diagnostics diagnostics = new Diagnostics(bits, bitLength);
 
-            int powerConsumption = diagnostics.runPowerDiagnostics();
-            System.out.println("Power consumption rating: " + powerConsumption);
+        int powerConsumption = diagnostics.runPowerDiagnostics();
+        System.out.println("Power consumption rating: " + powerConsumption);
 
-            int lifeSupportRating = diagnostics.runLifeSupportDiagnostics();
-            System.out.println("Life support rating: " + lifeSupportRating);
-
-        } catch(IOException e) {
-            System.out.println(e);
-        }
+        int lifeSupportRating = diagnostics.runLifeSupportDiagnostics();
+        System.out.println("Life support rating: " + lifeSupportRating);
     }
 }
