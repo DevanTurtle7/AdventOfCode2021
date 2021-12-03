@@ -6,14 +6,17 @@ import java.util.List;
 public class Diagnostics {
     private List<String> bits;
     private int bitLength;
+    private HashMap<Integer, Integer> mostCommonBits;
 
     public Diagnostics(List<String> bits, int bitLength) {
         this.bits = bits;
         this.bitLength = bitLength;
+        this.mostCommonBits = new HashMap<>();
+
+        this.getMostCommonBits();
     }
 
-    public int runDiagnostics() {
-        // Add all bit counts
+    public void getMostCommonBits() {
         HashMap<Integer, Integer> zerosInPos = new HashMap<>();
         HashMap<Integer, Integer> onesInPos = new HashMap<>();
 
@@ -43,19 +46,25 @@ public class Diagnostics {
             }
         }
 
-        // Get gamma and epsilon rates
-        String gammaRate = "";
-        String epsilonRate = "";
-
-        System.out.println(zerosInPos.values());
-        System.out.println(onesInPos.values());
-
         for (int i = 0; i < bitLength; i++) {
             int numZeros = zerosInPos.get(i);
             int numOnes = onesInPos.get(i);
 
-            gammaRate = gammaRate.concat(numZeros < numOnes ? "1" : "0");
-            epsilonRate = epsilonRate.concat(numZeros < numOnes ? "0" : "1");
+            int commonValue = numZeros > numOnes ? 0 : 1;
+            mostCommonBits.put(i, commonValue);
+        }
+    }
+
+    public int runDiagnostics() {
+        // Get gamma and epsilon rates
+        String gammaRate = "";
+        String epsilonRate = "";
+
+        for (int i = 0; i < bitLength; i++) {
+            Integer commonValue = mostCommonBits.get(i);
+
+            gammaRate = gammaRate.concat(commonValue.toString());
+            epsilonRate = epsilonRate.concat(commonValue == 1 ? "0" : "1");
         }
 
         int gammaValue = Integer.parseInt(gammaRate, 2);
