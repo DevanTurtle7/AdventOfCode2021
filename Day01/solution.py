@@ -19,10 +19,27 @@ def larger_than_prev(nums):
     
     return count
 
+def sliding_window(nums):
+    count = 0;
+    current_window = nums[0] + nums[1] + nums[2]
+    prev_window = 0
+
+    for i in range(3, len(nums)):
+        prev_window = current_window
+        # Shift the window along by 1
+        current_window -= nums[i-3]
+        current_window += nums[i]
+
+        if prev_window < current_window:
+            count += 1
+    
+    return count
+
 
 def main():
     data = parse_input('./input.txt')
     print(larger_than_prev(data))
+    print(sliding_window(data))
 
 if __name__ == "__main__":
     main()
