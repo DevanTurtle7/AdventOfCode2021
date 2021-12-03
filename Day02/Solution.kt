@@ -5,8 +5,8 @@ import java.io.InputStream
 
 class Instruction(val command: String, val amount: Int)
 
-class Position(var horiz: Int, var depth: Int) {
-    infix fun move(instruction: Instruction) {
+open class Sub(var horiz: Int, var depth: Int) {
+    open infix fun move(instruction: Instruction) {
         when(instruction.command) {
             "down" -> depth += instruction.amount
             "up" -> depth -= instruction.amount
@@ -17,8 +17,8 @@ class Position(var horiz: Int, var depth: Int) {
     fun finalPosition() = horiz * depth
 }
 
-class Sub(var horiz: Int, var depth: Int, var aim: Int) {
-    infix fun move(instruction: Instruction) {
+class AimingSub(horiz: Int, depth: Int, var aim: Int): Sub(horiz = horiz, depth = depth) {
+    override infix fun move(instruction: Instruction) {
         when(instruction.command) {
             "down" -> aim += instruction.amount
             "up" -> aim -= instruction.amount
@@ -28,8 +28,6 @@ class Sub(var horiz: Int, var depth: Int, var aim: Int) {
             }
         }
     }
-
-    fun finalPosition() = horiz * depth
 }
 
 fun parseData(filename: String): List<Instruction> {
@@ -49,20 +47,7 @@ fun parseData(filename: String): List<Instruction> {
     return instructions
 }
 
-fun solution1(instructions: List<Instruction>): Int {
-    val position = Position(0, 0)
-
-    instructions.forEach{
-        val instruction = it
-        position move instruction
-    }
-
-    return position.finalPosition()
-}
-
-fun solution2(instructions: List<Instruction>): Int {
-    val sub = Sub(0, 0, 0)
-
+fun moveSub(instructions: List<Instruction>, sub: Sub): Int {
     instructions.forEach{
         val instruction = it
         sub move instruction
@@ -73,9 +58,11 @@ fun solution2(instructions: List<Instruction>): Int {
 
 fun main() {
     val instructions = parseData("./input.txt")
-    val result1 = solution1(instructions)
+    val sub = Sub(0, 0)
+    val result1 = moveSub(instructions, sub)
     println("Solution 1: $result1")
 
-    val result2 = solution2(instructions)
+    val aimingSub = AimingSub(0, 0, 0)
+    val result2 = moveSub(instructions, aimingSub)
     println("Solution 2: $result2")
 }
