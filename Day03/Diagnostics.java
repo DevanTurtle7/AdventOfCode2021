@@ -17,6 +17,7 @@ public class Diagnostics {
     }
 
     public void getMostCommonBits() {
+        // Get counts of 0s and 1s in each pos
         HashMap<Integer, Integer> zerosInPos = new HashMap<>();
         HashMap<Integer, Integer> onesInPos = new HashMap<>();
 
@@ -46,6 +47,7 @@ public class Diagnostics {
             }
         }
 
+        // Populate most common value
         for (int i = 0; i < bitLength; i++) {
             int numZeros = zerosInPos.get(i);
             int numOnes = onesInPos.get(i);
