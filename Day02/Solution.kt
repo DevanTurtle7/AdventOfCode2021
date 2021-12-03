@@ -32,9 +32,9 @@ class Sub(var horiz: Int, var depth: Int, var aim: Int) {
     fun finalPosition() = horiz * depth
 }
 
-fun parseDataPart1(filename: String): Position {
+fun parseData(filename: String): List<Instruction> {
     val inputStream: InputStream = File(filename).inputStream()
-    val position = Position(0, 0)
+    val instructions = mutableListOf<Instruction>()
 
     inputStream.bufferedReader().forEachLine {
         val trimmed = it.trim()
@@ -43,37 +43,39 @@ fun parseDataPart1(filename: String): Position {
         val amount = tokens[1].toInt()
 
         val instruction = Instruction(command, amount)
+        instructions.add(instruction)
+    } 
+
+    return instructions
+}
+
+fun solution1(instructions: List<Instruction>): Int {
+    val position = Position(0, 0)
+
+    instructions.forEach{
+        val instruction = it
         position move instruction
     }
 
-    return position
+    return position.finalPosition()
 }
 
-fun parseDataPart2(filename: String): Sub {
-    val inputStream: InputStream = File(filename).inputStream()
+fun solution2(instructions: List<Instruction>): Int {
     val sub = Sub(0, 0, 0)
 
-    inputStream.bufferedReader().forEachLine {
-        val trimmed = it.trim()
-        val tokens: List<String> = trimmed.split(" ")
-        val command = tokens[0]
-        val amount = tokens[1].toInt()
-
-        val instruction = Instruction(command, amount)
+    instructions.forEach{
+        val instruction = it
         sub move instruction
     }
 
-    return sub
+    return sub.finalPosition()
 }
 
 fun main() {
-    val finalPosition = parseDataPart1("./input.txt")
-    val horiz = finalPosition.horiz
-    val depth = finalPosition.depth
-    val result = finalPosition.finalPosition()
+    val instructions = parseData("./input.txt")
+    val result1 = solution1(instructions)
+    println("Solution 1: $result1")
 
-    println("Horiz: $horiz, Depth: $depth, Mult: ${result}")
-
-    val sub = parseDataPart2("./input.txt")
-    println("Horiz: ${sub.horiz}, Depth: ${sub.depth}, Mult: ${sub.finalPosition()}")
+    val result2 = solution2(instructions)
+    println("Solution 2: $result2")
 }
