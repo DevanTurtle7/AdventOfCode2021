@@ -40,7 +40,7 @@ public class Diagnostics {
 
                     if (onesInPos.containsKey(i)) {
                         value = onesInPos.get(i) + 1;
-                    } 
+                    }
 
                     onesInPos.put(i, value);
                 }
@@ -76,38 +76,56 @@ public class Diagnostics {
         return powerConsumption;
     }
 
-    public void runLifeSupportDiagnostics() {
+    public int runLifeSupportDiagnostics() {
         // Get oxygen rating
         String oxygenGeneratorRating = "";
-        Set<String> remainingBytes = new HashSet<>(this.bytes);
-        Set<String> nextSet = new HashSet<>();
+        String scrubberRating = "";
+        Set<String> remainingCommonBytes = new HashSet<>(this.bytes);
+        Set<String> remainingUncommonBytes = new HashSet<>(this.bytes);
+        Set<String> nextCommonSet = new HashSet<>();
+        Set<String> nextUncommonSet = new HashSet<>();
         int index = 0;
 
-        while (remainingBytes.size() > 1) {
-            for (String currentByte : remainingBytes) {
-                int commonBit = mostCommonBits.get(index);
-                int currentBit = Character.getNumericValue(currentByte.charAt(index));
+        while (remainingCommonBytes.size() > 1 && remainingUncommonBytes.size() > 1) {
+            if (remainingCommonBytes.size() > 1) {
+                for (String currentByte : remainingCommonBytes) {
+                    int commonBit = mostCommonBits.get(index);
+                    int currentBit = Character.getNumericValue(currentByte.charAt(index));
 
-                if (currentBit == commonBit) {
-                    nextSet.add(currentByte);
-                    oxygenGeneratorRating = currentByte;
+                    if (currentBit == commonBit) {
+                        nextCommonSet.add(currentByte);
+                        oxygenGeneratorRating = currentByte;
+                    }
                 }
+                remainingCommonBytes = nextCommonSet;
+                nextCommonSet = new HashSet<>();
             }
 
-            remainingBytes = nextSet;
-            nextSet = new HashSet<>();
+            if (remainingUncommonBytes.size() > 1) {
+                for (String currentByte : remainingUncommonBytes) {
+                    int commonBit = mostCommonBits.get(index);
+                    int uncommonBit = commonBit == 0 ? 1 : 0;
+                    int currentBit = Character.getNumericValue(currentByte.charAt(index));
+
+                    if (currentBit == uncommonBit) {
+                        nextUncommonSet.add(currentByte);
+                        scrubberRating = currentByte;
+                    }
+                }
+                remainingUncommonBytes = nextUncommonSet;
+                nextUncommonSet = new HashSet<>();
+            } 
+
             index++;
         }
 
-        String scrubberRating = "";
-
-        for (int i = 0; i < oxygenGeneratorRating.length(); i++) {
-            char current = oxygenGeneratorRating.charAt(i);
-
-            scrubberRating = scrubberRating.concat(current == '0' ? "1" : "0");
-        }
         System.out.println(oxygenGeneratorRating);
         System.out.println(scrubberRating);
 
+        int oxygenGeneratorValue = Integer.parseInt(oxygenGeneratorRating, 2);
+        int scrubberValue = Integer.parseInt(scrubberRating, 2);
+        int lifeSupportRating = oxygenGeneratorValue * scrubberValue;
+
+        return lifeSupportRating;
     }
 }

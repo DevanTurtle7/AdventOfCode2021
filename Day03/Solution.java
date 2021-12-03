@@ -35,7 +35,8 @@ public class Solution {
             int powerConsumption = diagnostics.runPowerDiagnostics();
             System.out.println(powerConsumption);
 
-            diagnostics.runLifeSupportDiagnostics();
+            int lifeSupportRating = diagnostics.runLifeSupportDiagnostics();
+            System.out.println(lifeSupportRating);
 
         } catch(IOException e) {
             System.out.println(e);
